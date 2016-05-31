@@ -4,42 +4,42 @@ var chance = new Chance();
 var express = require('express');
 var app = express();
 
+var port = 3000;
+
 app.get('/test', function (req, res){
-	res.send("Hello again - test is working");
+	res.send("TEST command received");
 });
 
 app.get('/', function (req, res){
-	res.send(generateStudents() );
+	res.send(generateLogs() );
 });
 
-app.listen(3000, function () {
-	console.log('Accepting HTTP requests on port 3000.');
+app.listen(port, function () {
+	console.log('Accepting HTTP requests on port ' + port + '...');
 });
 
-function generateStudents() {
-	var numberOfStudents = chance.integer({
-		min: 0,
-		max: 10
-	});
-	console.log(numberOfStudents);	
-	var students = [];
-	for(var i = 0; i < numberOfStudents; i++) {
-		var gender = chance.gender();
-		var birthYear = chance.year({
-			min: 1986,
-			max: 1996
-		});
-		students.push({
-			firstName: chance.first({
-				gender: gender
-			}),
-			lasName: chance.last(),
-			gender: gender,
-			birthday: chance.birthday({
-				year: birthYear
-			})
+function generateLogs(){
+	var numberOfLogs = chance.integer({min: 1, max:10});
+	console.log(numberOfLogs);
+	var logs = [];
+	
+	for(var i = 0; i < numberOfLogs; i++){
+		var ipv4 = chance.ip();
+		var ipv6 = chance.ipv6();
+		var address = chance.url();
+		var randomyear = chance.integer({min:2007, max: 2016});
+		var date = chance.date({
+			string: true, 
+			year: randomyear})
+		
+		logs.push({
+			ipv4: ipv4,
+			ipv6: ipv6,
+			address: address,
+			date: date
 		});
 	};
-	console.log(students);
-	return students;
+	
+	console.log(logs);
+	return logs;
 }
